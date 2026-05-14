@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Class Destinations — Client Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B3A5C;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #FAF7F2;
+    --warm-gray: #8C8275;
+    --dark: #111111;
+    --white: #FFFFFF;
+    --phase-discovery: #1B3A5C;
+    --phase-proposal: #2E5B7A;
+    --phase-booking: #4A7C59;
+    --phase-destination: #7A6B3A;
+    --phase-pretrip: #8A4A3A;
+    --phase-traveling: #3A6B8A;
+    --phase-posttrip: #4A3A7A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 10%;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 50%;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+  .gold-line {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 28px 0;
+  }
+
+  /* NAMING CONVENTIONS */
+  .naming-section {
+    background: var(--navy);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 40px;
+  }
+  .naming-inner { max-width: 900px; margin: 0 auto; }
+  .naming-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .naming-block h3 {
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .naming-block .format-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .naming-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    padding: 8px 12px;
+    border-left: 2px solid rgba(201,168,76,0.3);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .naming-item strong {
+    display: block;
+    color: var(--gold-light);
+    font-weight: 500;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  /* JOURNEY */
+  .journey { padding: 60px 40px; max-width: 980px; margin: 0 auto; }
+  .journey-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 48px;
+  }
+
+  /* PHASE BLOCK */
+  .phase {
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .phase:nth-child(1) { animation-delay: 0.05s; }
+  .phase:nth-child(2) { animation-delay: 0.1s; }
+  .phase:nth-child(3) { animation-delay: 0.15s; }
+  .phase:nth-child(4) { animation-delay: 0.2s; }
+  .phase:nth-child(5) { animation-delay: 0.25s; }
+  .phase:nth-child(6) { animation-delay: 0.3s; }
+  .phase:nth-child(7) { animation-delay: 0.35s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .phase-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    font-family: 'Jost', sans-serif;
+  }
+  .phase-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--navy);
+    flex: 1;
+  }
+  .phase-count {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--warm-gray);
+    font-family: 'Jost', sans-serif;
+  }
+  .phase-toggle {
+    font-size: 18px;
+    color: var(--warm-gray);
+    transition: transform 0.3s ease;
+  }
+  .phase.collapsed .phase-toggle { transform: rotate(-90deg); }
+
+  .phase-body { overflow: hidden; transition: max-height 0.4s ease; }
+  .phase.collapsed .phase-body { max-height: 0 !important; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 16px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    align-items: start;
+    transition: background 0.2s;
+  }
+  .step:hover { background: rgba(201,168,76,0.04); }
+  .step:last-child { border-bottom: none; }
+
+  .step-timing {
+    font-size: 11px;
+    color: var(--warm-gray);
+    font-weight: 400;
+    padding-top: 2px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  .step-task {
+    font-size: 13px;
+    color: var(--dark);
+    font-weight: 400;
+    line-height: 1.55;
+  }
+  .step-task .note {
+    display: block;
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 4px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .step-responsible {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .badge {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-advisor { background: rgba(27,58,92,0.1); color: var(--navy); }
+  .badge-va { background: rgba(74,124,89,0.1); color: #4A7C59; }
+  .badge-auto { background: rgba(201,168,76,0.15); color: #8A6A1A; }
+  .badge-client { background: rgba(138,74,58,0.1); color: #8A4A3A; }
+  .badge-supplier { background: rgba(58,107,138,0.1); color: #3A6B8A; }
+
+  /* PHASE COLOURS */
+  .phase-discovery .phase-dot { background: var(--phase-discovery); }
+  .phase-discovery .phase-name { color: var(--phase-discovery); }
+  .phase-proposal .phase-dot { background: var(--phase-proposal); }
+  .phase-proposal .phase-name { color: var(--phase-proposal); }
+  .phase-booking .phase-dot { background: var(--phase-booking); }
+  .phase-booking .phase-name { color: var(--phase-booking); }
+  .phase-destination .phase-dot { background: var(--phase-destination); }
+  .phase-destination .phase-name { color: var(--phase-destination); }
+  .phase-pretrip .phase-dot { background: var(--phase-pretrip); }
+  .phase-pretrip .phase-name { color: var(--phase-pretrip); }
+  .phase-traveling .phase-dot { background: var(--phase-traveling); }
+  .phase-traveling .phase-name { color: var(--phase-traveling); }
+  .phase-posttrip .phase-dot { background: var(--phase-posttrip); }
+  .phase-posttrip .phase-name { color: var(--phase-posttrip); }
+
+  .phase-line { width: 100%; height: 2px; margin-bottom: 20px; border-radius: 2px; }
+  .phase-discovery .phase-line { background: linear-gradient(90deg, var(--phase-discovery), transparent); }
+  .phase-proposal .phase-line { background: linear-gradient(90deg, var(--phase-proposal), transparent); }
+  .phase-booking .phase-line { background: linear-gradient(90deg, var(--phase-booking), transparent); }
+  .phase-destination .phase-line { background: linear-gradient(90deg, var(--phase-destination), transparent); }
+  .phase-pretrip .phase-line { background: linear-gradient(90deg, var(--phase-pretrip), transparent); }
+  .phase-traveling .phase-line { background: linear-gradient(90deg, var(--phase-traveling), transparent); }
+  .phase-posttrip .phase-line { background: linear-gradient(90deg, var(--phase-posttrip), transparent); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 11px;
+    color: var(--warm-gray);
+    letter-spacing: 0.15em;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* WORKFLOWS */
+  .workflows-outer {
+    background: #F3EFE9;
+    border-top: 2px solid rgba(201,168,76,0.25);
+    padding-top: 60px;
+  }
+  .wf-block {
+    margin-bottom: 32px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .wf-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--navy);
+    cursor: pointer;
+    user-select: none;
+  }
+  .wf-num {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    min-width: 32px;
+  }
+  .wf-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    flex: 1;
+  }
+  .wf-meta { display: flex; gap: 8px; }
+  .wf-trigger-pill {
+    font-size: 10px;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(201,168,76,0.2);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.3);
+    white-space: nowrap;
+  }
+  .wf-body { overflow: hidden; transition: max-height 0.4s ease; }
+  .wf-block.collapsed .wf-body { max-height: 0 !important; }
+  .wf-block.collapsed .phase-toggle { transform: rotate(-90deg); }
+  .wf-note {
+    font-size: 12px; font-style: italic; color: var(--warm-gray);
+    padding: 12px 20px; background: rgba(201,168,76,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06); line-height: 1.5;
+  }
+  .wf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .wf-col { border-right: 1px solid rgba(0,0,0,0.06); }
+  .wf-col:last-child { border-right: none; }
+  .wf-col-label {
+    font-size: 9px; font-family: 'Jost', sans-serif;
+    letter-spacing: 0.25em; text-transform: uppercase; font-weight: 600;
+    color: var(--warm-gray); padding: 10px 16px 8px;
+    background: rgba(0,0,0,0.02); border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .wf-row {
+    display: grid; grid-template-columns: 1fr auto auto auto;
+    gap: 10px; padding: 10px 16px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    align-items: center; font-size: 12px; transition: background 0.2s;
+  }
+  .wf-row:hover { background: rgba(201,168,76,0.04); }
+  .wf-row:last-child { border-bottom: none; }
+  .wf-empty-row { grid-template-columns: 1fr; color: var(--warm-gray); font-style: italic; }
+  .wf-row-name { color: var(--dark); line-height: 1.4; }
+  .wf-row-due, .wf-row-trigger, .wf-row-actions { font-size: 10px; color: var(--warm-gray); font-style: italic; white-space: nowrap; }
+  .notif-on { font-size: 9px; padding: 2px 6px; border-radius: 10px; background: rgba(74,124,89,0.1); color: #4A7C59; font-weight: 600; white-space: nowrap; }
+  .notif-off { font-size: 9px; padding: 2px 6px; border-radius: 10px; background: rgba(0,0,0,0.05); color: var(--warm-gray); font-weight: 500; white-space: nowrap; }
+  .status-active { font-size: 9px; padding: 2px 8px; border-radius: 10px; background: rgba(74,124,89,0.12); color: #4A7C59; font-weight: 600; white-space: nowrap; }
+  .status-inactive { font-size: 9px; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,0.06); color: var(--warm-gray); font-weight: 500; white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 50px 24px 40px; }
+    .naming-section { padding: 32px 24px; }
+    .naming-grid { grid-template-columns: 1fr; }
+    .journey { padding: 40px 24px; }
+    .step { grid-template-columns: 1fr; gap: 6px; }
+    .step-timing { font-size: 10px; }
+    .step-responsible { flex-direction: row; justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">First Class Destinations</div>
+    <h1>The Client <em>Journey</em></h1>
+    <div class="gold-line"></div>
+    <p class="hero-sub">A complete overview of our planning process — from first inquiry to welcome home — and our naming conventions for trips and documents.</p>
+  </div>
+</header>
+
+<!-- NAMING CONVENTIONS -->
+<section class="naming-section">
+  <div class="naming-inner">
+    <div class="naming-grid">
+
+      <div class="naming-block">
+        <h3>Trip Naming</h3>
+        <div class="format-label">Last Name | Destination or Trip Title | Month Year</div>
+        <div class="naming-item"><strong>Example</strong>Bradshaw | Greece Reimagined | May 2026</div>
+        <div class="naming-item"><strong>Example</strong>Rae | Paris, WWII and Roman History | June 2026</div>
+      </div>
+
+      <div class="naming-block">
+        <h3>Document Naming</h3>
+        <div class="format-label">Type of Service | Property Name or Description | Dates</div>
+        <div class="naming-item">Air | Flight Itinerary for Knox 03-18JUN26 - CHS - ATH / DBV - CHS</div>
+        <div class="naming-item">Cruise | FSY ADVISOR - DO NOT PUBLISH - Reservation Confirmation #10820 - Knox David</div>
+        <div class="naming-item">Cruise | FSY Reservation Confirmation #10820 - Knox David</div>
+        <div class="naming-item">Hotel | King George Athens (Luxury Collection) June 4-5</div>
+        <div class="naming-item">Hotel | Montenegro June 14-16</div>
+        <div class="naming-item">Hotel | Villa Dubrovnik Hotel Reservation 16-18 June</div>
+        <div class="naming-item">Cruise | FSY Confirmation 10820 PAID IN FULL</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<main class="journey">
+  <div class="journey-title">End-to-End Client Journey</div>
+
+  <!-- DISCOVERY -->
+  <div class="phase phase-discovery" id="phase-1">
+    <div class="phase-header" onclick="togglePhase('phase-1')">
+      <div class="phase-dot">1</div>
+      <div class="phase-name">Discovery</div>
+      <div class="phase-count">9 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">Upon inquiry</div>
+          <div class="step-task">New client inquiry received
+            <span class="note">Via email, text, or phone call</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon inquiry</div>
+          <div class="step-task">Denise replies with Trip Inquiry link
+            <span class="note">Form must be submitted to initiate conversation; advisor sends link via email</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon form submission</div>
+          <div class="step-task">Form submission adds contact & trip to CRM (Tern)</div>
+          <div class="step-responsible"><span class="badge badge-client">Client</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Immediate</div>
+          <div class="step-task">Automated email acknowledges form submission with Tern scheduler link
+            <span class="note">Auto-trigger on form submission</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon form receipt</div>
+          <div class="step-task">Denise reviews form; makes referral if necessary; schedules call
+            <span class="note">If referral is made, cancel booked meeting in calendar</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon scheduling</div>
+          <div class="step-task">Conduct Discovery Call
+            <span class="note">Use Google Meet & Tern notetaker — notes save to contact record in Tern</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Within 48 hrs of call</div>
+          <div class="step-task">Send recap email with Agency Agreement & service fee invoice
+            <span class="note">Some clients do not pay fee before planning begins — email template in library</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Within 24 hrs of fee receipt</div>
+          <div class="step-task">Confirmation of being hired — automated email trigger</div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">24–48 hrs of call</div>
+          <div class="step-task">Research &amp; supplier outreach begins</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span><span class="badge badge-va">VA</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSAL -->
+  <div class="phase phase-proposal" id="phase-2">
+    <div class="phase-header" onclick="togglePhase('phase-2')">
+      <div class="phase-dot">2</div>
+      <div class="phase-name">Proposal</div>
+      <div class="phase-count">9 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">Upon hire confirmation</div>
+          <div class="step-task">Change trip status to Planning New or Planning Returning
+            <span class="note">Auto-trigger: Planning New sends thank you + profile form + what to expect. Planning Returning sends thank you + timeline expectation.</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">1–2 weeks</div>
+          <div class="step-task">Quote received from supplier</div>
+          <div class="step-responsible"><span class="badge badge-supplier">Supplier</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon receipt</div>
+          <div class="step-task">Save supplier docs to Tern (not visible to client)</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">2 days after quote</div>
+          <div class="step-task">Create proposal
+            <span class="note">Use AI assist / Chrome extension and edit accordingly</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">4 days after quote</div>
+          <div class="step-task">Send proposal to client
+            <span class="note">Tern email template</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">As needed</div>
+          <div class="step-task">Proposal follow-up</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Client variable</div>
+          <div class="step-task">Revise proposal as needed</div>
+          <div class="step-responsible"><span class="badge badge-supplier">Supplier</span><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon client approval</div>
+          <div class="step-task">Proposal approved — automated email trigger
+            <span class="note">If client approves in Tern, auto-trigger fires. If not, VA or Advisor sends Proposal Approval &amp; Payment email from template library.</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon approval</div>
+          <div class="step-task">Travel insurance quote added to Tern
+            <span class="note">Via integration or manual quote</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING -->
+  <div class="phase phase-booking" id="phase-3">
+    <div class="phase-header" onclick="togglePhase('phase-3')">
+      <div class="phase-dot">3</div>
+      <div class="phase-name">Booking</div>
+      <div class="phase-count">6 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">1–3 days after approval</div>
+          <div class="step-task">Confirm and pay deposits with suppliers</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon booking</div>
+          <div class="step-task">Send client Booking Confirmation email with profile form
+            <span class="note">Automated on trip status change to Booked</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">Upon booking</div>
+          <div class="step-task">Add booking to SION
+            <span class="note">Post for full amount</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">5–7 days after deposit</div>
+          <div class="step-task">Review &amp; update bookings with final payment due dates; review dates for payment emails in Tern
+            <span class="note">Using All Trips Payments workflow</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">As needed</div>
+          <div class="step-task">One-off tasks: car rentals, train tickets, dining, spa, etc.</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">10 days after Booked status</div>
+          <div class="step-task">Send Visa &amp; Health Requirements email (generic, links to Sherpa)
+            <span class="note">Automated trigger on trip status change to Booked</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESTINATION -->
+  <div class="phase phase-destination" id="phase-4">
+    <div class="phase-header" onclick="togglePhase('phase-4')">
+      <div class="phase-dot">4</div>
+      <div class="phase-name">Destination</div>
+      <div class="phase-count">4 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">11 days after Booked status</div>
+          <div class="step-task">Create AI-personalized packing list &amp; destination guide(s); request dining recs from hotels or suppliers</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">30 days after Booked status</div>
+          <div class="step-task">Destination email: Get Excited for [Destination] — Flights, Stays &amp; Arrival Tips</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">30 days before trip starts</div>
+          <div class="step-task">Destination email: Packing List + What to Expect + Dining Recommendations</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">1–2 months before trip</div>
+          <div class="step-task">Destination email: Make the Most of Your Trip — Self-Care &amp; Local Highlights
+            <span class="note">Automated in Tern</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRE-TRIP -->
+  <div class="phase phase-pretrip" id="phase-5">
+    <div class="phase-header" onclick="togglePhase('phase-5')">
+      <div class="phase-dot">5</div>
+      <div class="phase-name">Pre-Trip</div>
+      <div class="phase-count">9 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">105 days before trip</div>
+          <div class="step-task">Re-confirm and/or update trip with suppliers</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span><span class="badge badge-advisor">Advisor</span><span class="badge badge-supplier">Supplier</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">90 days before trip</div>
+          <div class="step-task">Send itinerary + form for any special requests
+            <span class="note">Automated in Tern</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">85 days before trip</div>
+          <div class="step-task">Review form; assist with special requests (dining, spa, etc.)</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">45 days before trip</div>
+          <div class="step-task">Send profile update form
+            <span class="note">Captures updated passport, loyalty programs, emergency contact details</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">24 days before trip</div>
+          <div class="step-task">Request final paperwork from suppliers</div>
+          <div class="step-responsible"><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">18 days before trip</div>
+          <div class="step-task">Denise records Loom itinerary review video</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">14 days before trip</div>
+          <div class="step-task">Send final itinerary to client</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">7–5 days before trip</div>
+          <div class="step-task">Send Final Travel Prep email + hotel VIP letters (if applicable)
+            <span class="note">Use email template in Tern library</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span><span class="badge badge-va">VA</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">24–48 hrs before trip</div>
+          <div class="step-task">Time to check in &amp; bon voyage email</div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAVELING -->
+  <div class="phase phase-traveling" id="phase-6">
+    <div class="phase-header" onclick="togglePhase('phase-6')">
+      <div class="phase-dot">6</div>
+      <div class="phase-name">Traveling</div>
+      <div class="phase-count">1 Step</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">2 days after trip starts</div>
+          <div class="step-task">Optional: Email to check in on trip
+            <span class="note">Automated in Tern</span>
+          </div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST-TRIP -->
+  <div class="phase phase-posttrip" id="phase-7">
+    <div class="phase-header" onclick="togglePhase('phase-7')">
+      <div class="phase-dot">7</div>
+      <div class="phase-name">Post-Trip</div>
+      <div class="phase-count">3 Steps</div>
+      <div class="phase-toggle">▾</div>
+    </div>
+    <div class="phase-line"></div>
+    <div class="phase-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-timing">5–7 days after trip ends</div>
+          <div class="step-task">Welcome Home &amp; Feedback survey</div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">30–45 days after trip ends</div>
+          <div class="step-task">Future trip follow-up &amp; ideas</div>
+          <div class="step-responsible"><span class="badge badge-advisor">Advisor</span></div>
+        </div>
+        <div class="step">
+          <div class="step-timing">180 days after trip ends</div>
+          <div class="step-task">Reminder: First Class Destinations curates travel worldwide — where do you want to go next?</div>
+          <div class="step-responsible"><span class="badge badge-auto">Auto</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- WORKFLOWS SECTION -->
+<section class="workflows-outer">
+  <div class="journey" style="padding-top:0;">
+    <div class="journey-title">Tern Workflows</div>
+
+    <!-- WF 01 -->
+    <div class="wf-block" id="wf-1">
+      <div class="wf-header" onclick="toggleWf('wf-1')">
+        <div class="wf-num">01</div>
+        <div class="wf-title">Trip Creation</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Trigger: Trip Created</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-grid">
+          <div class="wf-col">
+            <div class="wf-col-label">Tasks</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Review form &amp; confirm discovery call scheduled</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">1 day after task creation</div>
+              <div class="wf-row-notif"><span class="notif-on">Email On</span></div>
+            </div>
+          </div>
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Trip Inquiry</div>
+              <div class="wf-row-trigger">Immediately After Trip Created</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF 02 -->
+    <div class="wf-block" id="wf-2">
+      <div class="wf-header" onclick="toggleWf('wf-2')">
+        <div class="wf-num">02</div>
+        <div class="wf-title">Discovery</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Trigger: Trip Created</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-grid">
+          <div class="wf-col">
+            <div class="wf-col-label">Tasks</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Recap &amp; agreement | Service Fee via Stripe</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">1 day after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Check for signed agreement / paid fee | Move to Planning (New or Returning)</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">5 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Follow-up with supplier</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">8 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+          </div>
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row wf-empty-row">No automations configured</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF 03.1 -->
+    <div class="wf-block" id="wf-3">
+      <div class="wf-header" onclick="toggleWf('wf-3')">
+        <div class="wf-num">03.1</div>
+        <div class="wf-title">New Client Planning Workflow</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Auto-Apply: Planning | New</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-grid">
+          <div class="wf-col">
+            <div class="wf-col-label">Tasks</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Client proposal sent — feedback / updates?</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">7 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Quote Travel Insurance</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">7 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Trip approved: Confirm &amp; pay deposits; Update status to Booked</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">10 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Send email with profile form + Visas &amp; Travel Essentials</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">14 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+          </div>
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Proposal Approved</div>
+              <div class="wf-row-trigger">Client Approves Trip</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Tern Account</div>
+              <div class="wf-row-trigger">2 days after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Visa + Health reminder (status = booked)</div>
+              <div class="wf-row-trigger">5 days after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Travel Insurance</div>
+              <div class="wf-row-trigger">5 days after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF 03.2 -->
+    <div class="wf-block" id="wf-4">
+      <div class="wf-header" onclick="toggleWf('wf-4')">
+        <div class="wf-num">03.2</div>
+        <div class="wf-title">Returning Client Planning Workflow</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Auto-Apply: Planning | Returning</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-grid">
+          <div class="wf-col">
+            <div class="wf-col-label">Tasks</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Add trip specific tasks</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">2 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Client proposal sent — feedback / updates?</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">7 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Quote Travel Insurance</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">7 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Trip approval — Confirm &amp; pay deposits</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">10 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Send email with profile form + Visas &amp; Travel Essentials</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">14 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Update trip status to Booked</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">14 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+          </div>
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Proposal Approved</div>
+              <div class="wf-row-trigger">Client Approves Trip</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Travel Insurance (status = planning)</div>
+              <div class="wf-row-trigger">5 days after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Visa + Health reminder (status = booked)</div>
+              <div class="wf-row-trigger">5 days after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF 04 -->
+    <div class="wf-block" id="wf-5">
+      <div class="wf-header" onclick="toggleWf('wf-5')">
+        <div class="wf-num">04</div>
+        <div class="wf-title">All Trips Payments</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Auto-Apply: Booked</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-note">Sends payment due reminders to all full-access travelers. If balance is unpaid, sends reminders 1 day before and 1 day after due date. Creates admin task to verify completion.</div>
+        <div class="wf-grid" style="grid-template-columns: 1fr;">
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row">
+              <div class="wf-row-name">Thank you for authorizing</div>
+              <div class="wf-row-trigger">Client Authorizes Payment</div>
+              <div class="wf-row-actions">1 email · 2 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Payment Due Reminder 14 days</div>
+              <div class="wf-row-trigger">14 days before payment due</div>
+              <div class="wf-row-actions">1 email · 1 task</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Direct Supplier Payment</div>
+              <div class="wf-row-trigger">10 days before payment due</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Payment Due Reminder 1 day</div>
+              <div class="wf-row-trigger">1 day before payment due</div>
+              <div class="wf-row-actions">1 email · 1 task</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Your payment is now past due</div>
+              <div class="wf-row-trigger">1 day after payment due</div>
+              <div class="wf-row-actions">1 email · 1 task</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF 05 -->
+    <div class="wf-block" id="wf-6">
+      <div class="wf-header" onclick="toggleWf('wf-6')">
+        <div class="wf-num">05</div>
+        <div class="wf-title">Booked Trips — Pre / Post Travel</div>
+        <div class="wf-meta"><span class="wf-trigger-pill">Auto-Apply: Booked</span></div>
+        <div class="phase-toggle">▾</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-note">Includes automations starting at 90 days before travel through post-trip.</div>
+        <div class="wf-grid">
+          <div class="wf-col">
+            <div class="wf-col-label">Tasks</div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA: Post to SION</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">5 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA Pre-Travel: Client-booked flights — request details</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">15 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">What services still need to be booked?</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">20 days after task creation</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA Pre-Travel: Destination content</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">120 days before trip start</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA Pre-Travel: Request final paperwork from suppliers</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">35 days before trip start</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Pre-Travel: Send Wrap-Up Form email or schedule trip review</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">22 days before trip start</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA Pre-Travel: Send VIP hotel welcome letters &amp; amenity request (if any)</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">7 days before trip start</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Post: Send thank you message to selected supplier / reservation agent</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">7 days after trip end</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Post: Trip feedback?</div>
+              <div class="wf-row-who"><span class="badge badge-advisor">Myself</span></div>
+              <div class="wf-row-due">10 days after trip end</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">VA Post: Confirm commission &amp; archive trip</div>
+              <div class="wf-row-who"><span class="badge badge-va">Virtual Admin</span></div>
+              <div class="wf-row-due">181 days after trip end</div>
+              <div class="wf-row-notif"><span class="notif-off">Email Off</span></div>
+            </div>
+          </div>
+          <div class="wf-col">
+            <div class="wf-col-label">Automations</div>
+            <div class="wf-row">
+              <div class="wf-row-name">60-Day Check-in</div>
+              <div class="wf-row-trigger">60 days before trip starts</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">45-Day Check-in &amp; Profile Refresh</div>
+              <div class="wf-row-trigger">45 days before trip starts</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">48-Hours Flight Check-in Reminder</div>
+              <div class="wf-row-trigger">2 days before trip starts</div>
+              <div class="wf-row-actions">1 email · 1 task</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Arrival Day Check-In</div>
+              <div class="wf-row-trigger">2 days after trip starts</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-active">Active</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Welcome Home Survey</div>
+              <div class="wf-row-trigger">2 days after trip ends</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">6-Month Post Travel Check-In</div>
+              <div class="wf-row-trigger">180 days after trip ends</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-row-name">Booking Confirmation</div>
+              <div class="wf-row-trigger">Immediately after trip status changes</div>
+              <div class="wf-row-actions">1 email · 0 tasks</div>
+              <div class="wf-row-status"><span class="status-inactive">Inactive</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end .journey -->
+</section>
+
+<footer>
+  <p>© 2026 First Class Destinations &nbsp;·&nbsp; <a href="https://www.fcdestinations.com">fcdestinations.com</a></p>
+</footer>
+
+<script>
+  function togglePhase(id) {
+    const phase = document.getElementById(id);
+    const body = phase.querySelector('.phase-body');
+    const isCollapsed = phase.classList.contains('collapsed');
+    if (isCollapsed) {
+      phase.classList.remove('collapsed');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        phase.classList.add('collapsed');
+        body.style.maxHeight = '0';
+      });
+    }
+  }
+
+  // Set initial max-heights
+  document.querySelectorAll('.phase-body').forEach(body => {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+
+  function toggleWf(id) {
+    const block = document.getElementById(id);
+    const body = block.querySelector('.wf-body');
+    const isCollapsed = block.classList.contains('collapsed');
+    if (isCollapsed) {
+      block.classList.remove('collapsed');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        block.classList.add('collapsed');
+        body.style.maxHeight = '0';
+      });
+    }
+  }
+
+  document.querySelectorAll('.wf-body').forEach(body => {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+</script>
+</body>
+</html>
